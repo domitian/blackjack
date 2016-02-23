@@ -1,0 +1,14 @@
+
+<div class="jumbotron">
+    <div class="well">
+        <% if @game.winner %>
+             <%= @game.winner.capitalize %> Wins! 
+        <% else %>
+            Game is drawn!! 
+        <% end %>
+    </div>
+    <div class="well">
+        <%= link_to "Deal Again",games_url,class: "btn btn-success" %>
+        <%= link_to "Statistics",stats_games_url,class: "btn btn-info" %>
+    </div>
+</div>

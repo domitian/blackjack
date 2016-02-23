@@ -1,0 +1,11 @@
+<% @steps.each do |step| %>
+    <div class="well"> 
+        <h2> Step Type: <%= step.move_type %></h2>
+        <h3> Player Cards <span class="label label-success"><%= step.player_cards_values.join('  ') %></span>
+            Dealer Cards <span class="label label-danger"><%= step.dealer_cards_values.join('  ') %></span>
+        </h3>
+    </div>
+<% end %>
+
+<%= link_to "Hit",hit_game_path(@game),class: 'btn btn-primary' %>
+<%= link_to "Stand",stand_game_path(@game),class: 'btn btn-info' %>

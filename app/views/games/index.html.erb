@@ -1,0 +1,19 @@
+
+
+<div class="jumbotron">
+
+    <div class="container">
+        <%= form_tag(start_game_games_url,method: "post") do %>
+            <div class ="form-group">
+                <%= label_tag(:bet_amount, "Bet Amount") %>
+                <%= text_field_tag(:bet_amount,nil,class: 'form-control',placeholder: "Default amount is taken as 100" ) %>
+            </div>
+            <div class ="form-group">
+                <%= submit_tag("Start Game",class: "btn btn-primary btn-lg")%>
+            </div>
+        
+        <% end %>
+        </div>
+    </div>
+
+</div>

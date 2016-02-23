@@ -1,0 +1,31 @@
+<div class="jumbotron">
+    <table class="table">
+        <th>
+            <tr>
+                <td>Game No. </td>
+                <td>Dealer</td>
+                <td>Player </td>
+            </tr>
+        </th>
+        <% if @games.nil? %>
+            <tr> <td colspan='3'>No Games Player yet! </td></tr>
+        <% else %>
+            <% @games.each_with_index do |game,index| %>
+                <tbody>
+
+                        <tr>
+                            <td> <%= index+1 %></td>
+                            <td style="<%= game.winner == 'dealer' ? 'color:green': '' %>"> 
+                                <%= game.game_stat.dealer_score %>
+                            </td>
+                            <td style="<%= game.winner == 'player' ? 'color:green': '' %>">
+                                <%= game.game_stat.player_score %>
+                            </td>
+                        </tr>
+                </tbody>
+            <% end %>
+        <% end %>
+    </table>
+</div>
+
+

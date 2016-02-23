@@ -1,8 +1,6 @@
 class Game < ActiveRecord::Base
     # State machine for controlling the state of the game
     include AASM
-    DEALER = 0
-    PLAYER = 1
     cattr_accessor :card_stack
     @@num_card_decks = 6
     # Storing the all 6 deck of card objects in this array
@@ -10,6 +8,7 @@ class Game < ActiveRecord::Base
 
     serialize :cards_dealt, Array
     has_many :game_steps
+    has_one :game_stat
 
     enum state: {
         started: 0,
@@ -31,7 +30,7 @@ class Game < ActiveRecord::Base
         end
 
         event :end_game do
-            transitions :from => [:player_move], :to => :ended
+            transitions :from => [:player_move], :to => :ended, :after => :store_stats
         end
 
     end
@@ -56,15 +55,17 @@ class Game < ActiveRecord::Base
         self.save
         self.game_steps.create(move_type: 'stand',cards_dealt_to_dealer: [self.cards_dealt.last])
         unless greater_than_equal_to_21?
-            if dealer_score <= 16
+            @dealer_scores = dealer_score
+            @player_scores = player_score
+            if @dealer_scores <= 16
                 stand
             else
-                if player_score > dealer_score
+                if @player_scores > @dealer_scores
                     self.winner = PLAYER
-                elsif dealer_score > player_score
-                    self.winnder = DEALER
+                elsif @dealer_scores > @player_scores
+                    self.winner = DEALER
                 end
-                end_game
+                end_game!
             end
         end
     end
@@ -73,15 +74,17 @@ class Game < ActiveRecord::Base
 
     def greater_than_equal_to_21?
         puts "player score is #{player_score}, dealer_score is #{dealer_score}"
-        if player_score > 21 || dealer_score == 21
+        @player_scores = player_score
+        @dealer_scores = dealer_score
+        if @player_scores > 21 || @dealer_scores == 21
             self.winner = DEALER
-        elsif dealer_score > 21 || player_score == 21
+        elsif @dealer_scores > 21 || @player_scores == 21
             self.winner = PLAYER
         else
             return false
         end
         self.ended_at = Time.now
-        end_game    
+        end_game!   
         return true
     end
 
@@ -99,7 +102,6 @@ class Game < ActiveRecord::Base
         self.game_steps.each do |s|
             cards_dealt_to_player.concat s.cards_dealt_to_player
         end
-        puts cards_dealt_to_player
         @player_card_objects = @@card_stack.values_at *cards_dealt_to_player
     end
 
@@ -125,6 +127,10 @@ class Game < ActiveRecord::Base
     end
 
     private
+
+    def store_stats
+        GameStat.create(player_score: @player_scores,dealer_score: @dealer_scores,game_id: self.id)
+    end
 
     def pick_random_card_from_available_cards
         loop do

@@ -7,4 +7,20 @@ class GameStep < ActiveRecord::Base
         hit: 1,
         stand: 2
     }
+    delegate :card_stack, to: :game
+
+    def player_cards_values
+        obj = card_stack.values_at *self.cards_dealt_to_player
+        obj.map do |c| c.value end
+    end
+
+    def dealer_cards_values
+        obj = card_stack.values_at *self.cards_dealt_to_dealer
+        obj.map do |c| c.value end
+    end
+
+    private
+
+
+
 end

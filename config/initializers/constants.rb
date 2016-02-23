@@ -1,0 +1,3 @@
+DEALER = 0
+PLAYER = 1
+
