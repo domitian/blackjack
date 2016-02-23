@@ -100,7 +100,7 @@ class Game < ActiveRecord::Base
             cards_dealt_to_player.concat s.cards_dealt_to_player
         end
         puts cards_dealt_to_player
-        @@card_stack.values_at *cards_dealt_to_player
+        @player_card_objects = @@card_stack.values_at *cards_dealt_to_player
     end
 
     def dealer_cards
@@ -108,7 +108,7 @@ class Game < ActiveRecord::Base
         self.game_steps.each do |s|
             cards_dealt_to_dealer.concat s.cards_dealt_to_dealer
         end
-        @@card_stack.values_at *cards_dealt_to_dealer
+        @dealer_card_objects = @@card_stack.values_at *cards_dealt_to_dealer
     end
 
 
