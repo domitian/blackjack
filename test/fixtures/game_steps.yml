@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 1
+  played_at: 2016-02-22 19:59:54
+  cards_dealt_to_player: MyText
+  cards_dealt_to_dealer: MyText
+  move_type: 1
+
+two:
+  game_id: 1
+  played_at: 2016-02-22 19:59:54
+  cards_dealt_to_player: MyText
+  cards_dealt_to_dealer: MyText
+  move_type: 1
